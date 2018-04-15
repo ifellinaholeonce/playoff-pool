@@ -7,7 +7,7 @@ class Game extends Component {
   render(){
     let games = this.props.games.map((game, i) => {
       return(
-        <tr>
+        <tr key={i}>
           <td>{game.gameData.game.pk.toString().substr(6, 2)}</td>
           <th>{game.gameData.game.pk.toString().substr(9, 2)}</th>
           <td>{game.gameData.teams.home.abbreviation}({game.liveData.boxscore.teams.home.teamStats.teamSkaterStats.goals})</td>

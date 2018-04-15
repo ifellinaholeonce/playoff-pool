@@ -5,9 +5,12 @@ class Team extends Component {
     super(props)
   }
   render(){
-    let players = this.props.players.map((player, i) => {
+    let Teamplayers = this.props.team.map((team, i) => {
+      let player = this.props.players.find(p => {
+        return p.name === team.name
+      })
       return(
-        <tr>
+        <tr key={i}>
           <th>{player.playing !== "false"? player.playing : i}</th>
           <td>{player.name}</td>
           <td>{player.team}</td>
@@ -35,7 +38,7 @@ class Team extends Component {
             </tr>
           </thead>
           <tbody>
-            {players}
+            {Teamplayers}
           </tbody>
         </table>
       </div>

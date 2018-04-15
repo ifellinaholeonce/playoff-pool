@@ -9,9 +9,11 @@ class App extends Component {
     super(props)
     this.state = {
       players: [],
-      games: []
+      games: [],
+      teams: []
     }
   }
+
   componentDidMount = () => {
     this.connection = new WebSocket("ws://127.0.0.1:3030");
     this.connection.onmessage = (event) => {
@@ -21,7 +23,8 @@ class App extends Component {
         case "init":
           this.setState({
             players: message.body.players,
-            games: message.body.games
+            games: message.body.games,
+            teams: message.body.teams
           })
         break;
         case "update":
@@ -34,20 +37,23 @@ class App extends Component {
     }
   }
   render() {
+    let teams = this.state.teams.map((team, i) => {
+      return (
+        <div key={i}>
+          <p className="App-intro">
+            Team {i}
+          </p>
+          <Team team={team} players={this.state.players} />
+        </div>
+      )
+    })
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          Team
-        </p>
-        {this.state.players.length > 0 &&
-          < Team
-            players={this.state.players}
-           />
-        }
+        {teams}
         <p className="App-intro">
           Games
         </p>
