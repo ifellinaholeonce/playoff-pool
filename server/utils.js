@@ -2,7 +2,18 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
+const LINKS = [
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1652636&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1647989&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1651068&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1648775&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1649490&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1648256&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1666352&",
+  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1653033&"
+]
 let GAMES = [];
+let TEAMS = [];
 let PLAYERS = [];
 
 
@@ -10,6 +21,9 @@ const abvCorrection = (team) => {
   switch (team) {
     case "NAS":
       team = "NSH"
+    break;
+    case "SAN":
+      team = "SJS"
     break;
   }
   return team
@@ -26,7 +40,10 @@ const checkPlaying = (team) => {
 }
 
 const checkPlays = () => {
-
+  PLAYERS.forEach((player) => {
+    player.goals = 0;
+    player.assists = 0
+  })
   GAMES.forEach((game) => {
     game.liveData.plays.scoringPlays.forEach((scoringPlay) => {
       let play = game.liveData.plays.allPlays[scoringPlay]
@@ -40,7 +57,7 @@ const checkPlays = () => {
         secondaryAssist = play.players[2].player.fullName
       }
       PLAYERS.forEach(player => {
-        if (scorer.includes(player.name.substring(0, player.name.indexOf(',')))) {
+        if (scorer && scorer.includes(player.name.substring(0, player.name.indexOf(',')))) {
           player.goals = Number(player.goals) + 1
         } else if (primaryAssist && primaryAssist.includes(player.name.substring(0, player.name.indexOf(',')))) {
           player.assists = Number(player.assists) + 1
@@ -62,10 +79,10 @@ const getGame = (link) => {
   })
 }
 
-let getPlayers = function () {
+let getPlayers = function (link) {
   let players = []
   return new Promise((resolve, reject) => {
-    request(`http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1649490&`, function (error, response, html) {
+    request(link, function (error, response, html) {
       let $ = cheerio.load(html);
       for (let i = 1; i < $('.name').length; i++) {
         if ($('.name').eq(i).text() !== "Goalies") {
@@ -114,35 +131,60 @@ let init = async function (ws) {
     type: "init",
     body: {
       players: PLAYERS,
-      games: GAMES
+      games: GAMES,
+      teams: TEAMS
     }
   }
   ws.send(JSON.stringify(message))
 }
 
 let startServer = async () => {
+  let teams = []
   let games = await getGames()
   GAMES = games
-  let players = await getPlayers()
-  PLAYERS = players
-  checkPlays();
+  for (team of LINKS) {
+    teams.push(
+      getPlayers(team)
+    )
+  }
+  Promise.all(teams).then(teams => {
+    teams.forEach((team) => {
+      TEAMS.push(team)
+      team.forEach(player => {
+        if (!(PLAYERS.some(el => el.name === player.name))) {
+          PLAYERS.push(player)
+        }
+      })
+    })
+  })
+}
+
+let updateConditions = (game, i) => {
+  if (
+    game.liveData.plays.scoringPlays.length > GAMES[i].liveData.plays.scoringPlays.length ||
+    game.gameData.status.detailedState !==  GAMES[i].gameData.status.detailedState
+  ) {
+    return true
+  } else {
+    return false
+  }
 }
 
 let update = async (clients) => {
   let needUpdate = false;
   let games = await getGames();
   games.forEach((game, i) =>{
-    if (game.liveData.plays.scoringPlays.length > GAMES[i].liveData.plays.scoringPlays.length) {
+    if (updateConditions(game, i)) {
       needUpdate = true;
     }
   })
   GAMES = games
-  needUpdate? checkPlays() : false
+  checkPlays()
   let message = {
     type: "update",
     body: {
       players: PLAYERS,
-      games: GAMES
+      games: GAMES,
     }
   }
   return needUpdate? message : false
