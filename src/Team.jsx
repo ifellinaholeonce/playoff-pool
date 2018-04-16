@@ -5,7 +5,7 @@ class Team extends Component {
     super(props)
   }
   render(){
-    let Teamplayers = this.props.team.map((team, i) => {
+    let teamPlayers = this.props.team.players.map((team, i) => {
       let player = this.props.players.find(p => {
         return p.name === team.name
       })
@@ -38,7 +38,7 @@ class Team extends Component {
             </tr>
           </thead>
           <tbody>
-            {Teamplayers}
+            {teamPlayers}
           </tbody>
         </table>
       </div>

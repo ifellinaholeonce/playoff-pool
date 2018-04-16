@@ -79,6 +79,16 @@ const getGame = (link) => {
   })
 }
 
+const getTeamName = (link) => {
+  return new Promise((resolve, reject) => {
+    request(link, (error, response, html) => {
+      let $ = cheerio.load(html);
+      let teamName = $('.breadcrumbs-container').children().last().text()
+      resolve(teamName)
+    })
+  })
+}
+
 let getPlayers = function (link) {
   let players = []
   return new Promise((resolve, reject) => {
@@ -148,14 +158,19 @@ let startServer = async () => {
     )
   }
   Promise.all(teams).then(teams => {
-    teams.forEach((team) => {
-      TEAMS.push(team)
+    teams.forEach(async (team, i) => {
+      let teamName = await getTeamName(LINKS[i])
+      TEAMS.push({
+        teamName: teamName,
+        players: team
+      })
       team.forEach(player => {
         if (!(PLAYERS.some(el => el.name === player.name))) {
           PLAYERS.push(player)
         }
       })
     })
+    checkPlays();
   })
 }
 

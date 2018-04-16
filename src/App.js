@@ -41,7 +41,7 @@ class App extends Component {
       return (
         <div key={i}>
           <p className="App-intro">
-            Team {i}
+            {team.teamName}
           </p>
           <Team team={team} players={this.state.players} />
         </div>
