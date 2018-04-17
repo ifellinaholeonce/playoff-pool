@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3030;
 const server = express()
    // Make the express server serve static assets (html, javascript, css) from the /public folder
   .use(express.static('public'))
-  .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
 const wss = new SocketServer.Server({
@@ -33,7 +33,9 @@ wss.broadcast = (data) => {
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  utils.init(ws)
+  ws.send(JSON.stringify({message: "hello"}))
+
+  // utils.init(ws)
   console.log('Client connected');
   ws.on('message', function incoming(message) {
     message = JSON.parse(message)
@@ -52,14 +54,14 @@ wss.on('connection', (ws) => {
   ws.on('close', () => console.log('Client disconnected'));
 });
 
-utils.startServer();
-setInterval(async () => {
-  let update = await utils.update();
-  if (update) {
-    console.log("Send Update")
-    wss.broadcast(update)
-  } else {
-    console.log(update)
-    console.log("No Update")
-  }
-}, 1 * 30 * 1000)
+// utils.startServer();
+// setInterval(async () => {
+//   let update = await utils.update();
+//   if (update) {
+//     console.log("Send Update")
+//     wss.broadcast(update)
+//   } else {
+//     console.log(update)
+//     console.log("No Update")
+//   }
+// }, 1 * 30 * 1000)
