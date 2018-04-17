@@ -19,7 +19,6 @@ class App extends Component {
     this.connection = new WebSocket(this.HOST);
     this.connection.onmessage = (event) => {
       let message = JSON.parse(event.data)
-      console.log(message)
       switch (message.type) {
         case "init":
           this.setState({
