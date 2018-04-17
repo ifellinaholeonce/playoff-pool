@@ -1,28 +1,67 @@
-var WebSocketServer = require("ws").Server
-var http = require("http")
-var express = require("express")
-var app = express()
-var port = process.env.PORT || 5000
+const express = require('express');
+const SocketServer = require('ws');
+const utils = require('./utils.js')
 
-app.use(express.static(__dirname + "/"))
+const PORT = process.env.PORT || 3030;
 
-var server = http.createServer(app)
-server.listen(port)
+// Create a new express server
+const server = express()
+   // Make the express server serve static assets (html, javascript, css) from the /public folder
+  .use(express.static('public'))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-console.log("http server listening on %d", port)
+// Create the WebSockets server
+const wss = new SocketServer.Server({
+   server,
+   ssl: true
+  });
 
-var wss = new WebSocketServer({server: server})
-console.log("websocket server created")
-
-wss.on("connection", function(ws) {
-  var id = setInterval(function() {
-    ws.send(JSON.stringify(new Date()), function() {  })
-  }, 1000)
-
-  console.log("websocket connection open")
-
-  ws.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
+//This will broadcast messages to everyone connected
+wss.broadcast = (data) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === SocketServer.OPEN) {
+      let message = {
+        type: data.type,
+        body: data.body
+      }
+      client.send(JSON.stringify(message))
+    }
   })
-})
+}
+
+// Set up a callback that will run when a client connects to the server
+// When a client connects they are assigned a socket, represented by
+// the ws parameter in the callback.
+wss.on('connection', (ws) => {
+  ws.send(JSON.stringify({message: "hello"}))
+
+  // utils.init(ws)
+  console.log('Client connected');
+  ws.on('message', function incoming(message) {
+    message = JSON.parse(message)
+    switch (message.type) {
+    case "getPlayers":
+    break;
+    default:
+      console.log("Unknown: ", message)
+    }
+  })
+
+  ws.on('error', (error) => {
+    console.log(error);
+  })
+  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  ws.on('close', () => console.log('Client disconnected'));
+});
+
+// utils.startServer();
+// setInterval(async () => {
+//   let update = await utils.update();
+//   if (update) {
+//     console.log("Send Update")
+//     wss.broadcast(update)
+//   } else {
+//     console.log(update)
+//     console.log("No Update")
+//   }
+// }, 1 * 30 * 1000)
