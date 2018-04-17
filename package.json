@@ -2,12 +2,6 @@
   "name": "hockey-react",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-  },
-  "cacheDirectories": [
-    "node_modules",
-    "server/node_modules"
-  ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
@@ -19,8 +13,7 @@
     "ws": "^5.1.1"
   },
   "scripts": {
-    "start": "node server && react-scripts start",
-    "heroku-postbuild" : "npm install && npm install --only=dev --nos-shrinkwrap && npm run build",
+    "start": "react-scripts start && node server",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
