@@ -12,6 +12,9 @@
     "request": "^2.85.0",
     "ws": "^5.1.1"
   },
+  "engines": {
+    "node": "9.4.x"
+  },
   "scripts": {
     "start": "node server",
     "heroku-postbuild": "cd react && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
