@@ -15,7 +15,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.connection = new WebSocket("ws://127.0.0.1:3030");
+    this.connection = new WebSocket(location.origin.replace(/^http/, 'ws'));
     this.connection.onmessage = (event) => {
       let message = JSON.parse(event.data)
       console.log(message)

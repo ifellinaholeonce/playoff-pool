@@ -2,7 +2,7 @@ const express = require('express');
 const SocketServer = require('ws');
 const utils = require('./utils.js')
 
-const PORT = 3030;
+const PORT = process.env.PORT || 3030;
 
 // Create a new express server
 const server = express()
