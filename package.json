@@ -16,7 +16,7 @@
     "node": "9.4.x"
   },
   "scripts": {
-    "start": "node server",
+    "start": "node server/server",
     "heroku-postbuild": "cd react && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   }
 }
