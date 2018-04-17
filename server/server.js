@@ -12,8 +12,7 @@ const server = express()
 
 // Create the WebSockets server
 const wss = new SocketServer.Server({
-   server,
-   ssl: true
+   server
   });
 
 //This will broadcast messages to everyone connected
