@@ -2,6 +2,14 @@
   "name": "hockey-react",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "node server",
+    "heroku-postbuild" : "npm isntall && npm install --only=dev --nos-shrinkwrap &&n npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "server/node_modules"
+  ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
