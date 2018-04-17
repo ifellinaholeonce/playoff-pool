@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3030;
 // Create a new express server
 const server = express()
    // Make the express server serve static assets (html, javascript, css) from the /public folder
-  .use(express.static('build'))
+  .use(express.static('public'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
