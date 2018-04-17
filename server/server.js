@@ -1,14 +1,13 @@
 const express = require('express');
 const SocketServer = require('ws');
-const utils = require('./utils.js');
-const path = require('path');
+const utils = require('./utils.js')
 
 const PORT = process.env.PORT || 3030;
 
 // Create a new express server
 const server = express()
    // Make the express server serve static assets (html, javascript, css) from the /public folder
-  .use(express.static(path.resolve(__dirname, '..react/build')))
+  .use(express.static('react/build'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
