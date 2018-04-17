@@ -11,7 +11,10 @@ const server = express()
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
-const wss = new SocketServer.Server({ server });
+const wss = new SocketServer.Server({
+   server,
+   ssl: true
+  });
 
 //This will broadcast messages to everyone connected
 wss.broadcast = (data) => {
