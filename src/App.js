@@ -44,6 +44,7 @@ class App extends Component {
             {team.teamName}
           </p>
           <Team team={team} players={this.state.players} />
+          <p>Team Total: </p>
         </div>
       )
     })

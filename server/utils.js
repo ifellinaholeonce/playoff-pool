@@ -25,6 +25,12 @@ const abvCorrection = (team) => {
     case "SAN":
       team = "SJS"
     break;
+    case "WAS":
+      team = "WSH"
+    break;
+    case "TAM":
+      team = "TBL"
+    break;
   }
   return team
 }
@@ -50,7 +56,7 @@ const checkPlays = () => {
       let scorer = play.players[0].player.fullName
       let primaryAssist;
       let secondaryAssist;
-      if (play.players[1].playerType == "Assist") {
+      if (play.players[1] && play.players[1].playerType == "Assist") {
         primaryAssist = play.players[1].player.fullName
       }
       if (play.players[2] && play.players[2].playerType == "Assist") {
@@ -137,6 +143,7 @@ let getGames = async function () {
 }
 
 let init = async function (ws) {
+  await checkPlays();
   let message = {
     type: "init",
     body: {
@@ -157,7 +164,7 @@ let startServer = async () => {
       getPlayers(team)
     )
   }
-  Promise.all(teams).then(teams => {
+  Promise.all(teams).then(async teams => {
     teams.forEach(async (team, i) => {
       let teamName = await getTeamName(LINKS[i])
       TEAMS.push({
@@ -170,7 +177,7 @@ let startServer = async () => {
         }
       })
     })
-    checkPlays();
+    await checkPlays();
   })
 }
 
@@ -193,8 +200,12 @@ let update = async (clients) => {
       needUpdate = true;
     }
   })
-  GAMES = games
-  checkPlays()
+  if (needUpdate) {
+    PLAYERS.forEach((player, i) => {
+      PLAYERS[i].playing = checkPlaying(player.team)
+    })
+    checkPlays()
+  }
   let message = {
     type: "update",
     body: {
@@ -202,6 +213,7 @@ let update = async (clients) => {
       games: GAMES,
     }
   }
+  GAMES = games
   return needUpdate? message : false
 }
 
