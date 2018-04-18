@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Table} from 'react-bootstrap'
 
 class Game extends Component {
   constructor(props) {
@@ -18,8 +19,7 @@ class Game extends Component {
       )
     })
     return(
-      <div>
-        <table>
+        <Table hover>
           <thead>
             <tr>
               <th>Round</th>
@@ -33,8 +33,7 @@ class Game extends Component {
           <tbody>
             {games}
           </tbody>
-        </table>
-      </div>
+        </Table>
     )
   }
 }

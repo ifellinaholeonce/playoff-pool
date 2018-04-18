@@ -42,6 +42,7 @@ const checkPlaying = (team) => {
       status = game.gameData.status.detailedState
     }
   })
+  console.log(`${team} is ${status}`)
   return status
 }
 
@@ -200,9 +201,12 @@ let update = async (clients) => {
       needUpdate = true;
     }
   })
+  GAMES = games
   if (needUpdate) {
     PLAYERS.forEach((player, i) => {
       PLAYERS[i].playing = checkPlaying(player.team)
+      console.log("team", player.team)
+      console.log("PLAYER", PLAYERS[i].playing)
     })
     checkPlays()
   }
@@ -213,7 +217,6 @@ let update = async (clients) => {
       games: GAMES,
     }
   }
-  GAMES = games
   return needUpdate? message : false
 }
 

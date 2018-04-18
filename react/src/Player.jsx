@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {Table} from 'react-bootstrap'
+
 
 class Team extends Component {
   constructor(props) {
@@ -15,7 +17,6 @@ class Team extends Component {
           <td>{player.name}</td>
           <td>{player.team}</td>
           <td>{player.score}</td>
-          <td></td>
           <td>{player.playing !== "false"? player.goals : "-"}</td>
           <td>{player.playing !== "false"? player.assists : "-"}</td>
           <td>{player.playing !== "false"? Number(player.score) + Number(player.goals) + Number(player.assists) : player.score}</td>
@@ -24,23 +25,22 @@ class Team extends Component {
     })
     return(
       <div>
-        <table>
+        <Table striped bordered condensed hover>
           <thead>
             <tr>
               <th>#</th>
               <th>Name</th>
               <th>Team</th>
-              <th>Score Before Today</th>
-              <th></th>
-              <th>Goals Today</th>
-              <th>Assists Today</th>
+              <th>Score</th>
+              <th>Goals</th>
+              <th>Assists</th>
               <th>Total</th>
             </tr>
           </thead>
           <tbody>
             {teamPlayers}
           </tbody>
-        </table>
+        </Table>
       </div>
     )
   }
