@@ -215,9 +215,10 @@ let update = async (clients) => {
     body: {
       players: PLAYERS,
       games: GAMES,
+      teams: TEAMS
     }
   }
-  return needUpdate? message : false
+  return message
 }
 
 module.exports = {
