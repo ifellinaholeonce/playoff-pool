@@ -19,7 +19,6 @@ class App extends Component {
     team.players.forEach(player => {
       score += Number(player.score) + Number(player.goals) + Number(player.assists)
     })
-    console.log(score)
     return score
   }
   componentDidMount = () => {
@@ -31,7 +30,6 @@ class App extends Component {
     }
     this.connection.onmessage = (event) => {
       let message = JSON.parse(event.data)
-      console.log(message)
       switch (message.type) {
         case "init":
         let teams = message.body.teams
