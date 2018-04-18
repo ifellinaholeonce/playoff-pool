@@ -21,6 +21,18 @@ class App extends Component {
     })
     return score
   }
+
+  updateTeamRoster = (teamRoster, playersList) => {
+    teamRoster.players.forEach((player, i) => {
+      playersList.forEach(p => {
+        if (p.name === player.name) {
+          teamRoster.players[i].goals = p.goals
+          teamRoster.players[i].assists = p.assists
+        }
+      })
+    })
+    return teamRoster
+  }
   componentDidMount = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
       this.connection = new WebSocket("ws://127.0.0.1:3030")
@@ -30,27 +42,24 @@ class App extends Component {
     }
     this.connection.onmessage = (event) => {
       let message = JSON.parse(event.data)
+      let updatedRosters = []
+      message.body.teams.forEach(team => {
+        updatedRosters.push(this.updateTeamRoster(team, message.body.players))
+        team.totalScore = this.getTeamTotalScore(team)
+      })
       switch (message.type) {
         case "init":
-        let teams = message.body.teams
-        teams.forEach(team => {
-          team.totalScore = this.getTeamTotalScore(team)
-        })
           this.setState({
             players: message.body.players,
             games: message.body.games,
-            teams
+            teams: updatedRosters
           })
         break;
         case "update":
-          let teams = message.body.teams
-          teams.forEach(team => {
-            team.totalScore = this.getTeamTotalScore(team)
-          })
           this.setState({
             players: message.body.players,
             games: message.body.games,
-            teams
+            teams: updatedRosters
           })
         break;
       }

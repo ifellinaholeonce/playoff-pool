@@ -22,7 +22,7 @@ class Teams extends React.Component {
       .sort((a, b) => { return b.totalScore - a.totalScore})
       .map((team, i) => {
       return (
-        <Panel eventKey={i}>
+        <Panel eventKey={i} key={i}>
           <Panel.Heading>
             <Panel.Title toggle>{i+1}: {team.teamName} ({team.totalScore})</Panel.Title>
           </Panel.Heading>
