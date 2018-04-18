@@ -43,9 +43,14 @@ class App extends Component {
           })
         break;
         case "update":
+          let teams = message.body.teams
+          teams.forEach(team => {
+            team.totalScore = this.getTeamTotalScore(team)
+          })
           this.setState({
             players: message.body.players,
-            games: message.body.games
+            games: message.body.games,
+            teams
           })
         break;
       }
