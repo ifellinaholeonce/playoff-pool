@@ -3,15 +3,15 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
 const LINKS = [
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1652636&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1647989&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1651068&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1648775&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1649490&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1648256&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1666352&",
-  "http://www.onlinepools.com/hockey/index.php/h/234970/QkY4xraT/report/team?team_id=1653033&"
-]
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1917942&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1914812&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1919654&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1917902&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1917313&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1914990&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1915939&",
+  "http://www.onlinepools.com/hockey/index.php/h/263816/d3Rrvr5F/report/team?team_id=1917875&",
+];
 let GAMES = [];
 let TEAMS = [];
 let PLAYERS = [];
