@@ -64,12 +64,27 @@ const checkPlays = () => {
         secondaryAssist = play.players[2].player.fullName
       }
       PLAYERS.forEach(player => {
-        if (scorer && scorer.includes(player.name.substring(0, player.name.indexOf(',')))) {
-          player.goals = Number(player.goals) + 1
-        } else if (primaryAssist && primaryAssist.includes(player.name.substring(0, player.name.indexOf(',')))) {
-          player.assists = Number(player.assists) + 1
-        } else if (secondaryAssist && secondaryAssist.includes(player.name.substring(0, player.name.indexOf(',')))) {
-          player.assists = Number(player.assists) + 1
+        if (player.name.substring(0, player.name.indexOf(",")).length > 0) {
+          if (
+            scorer &&
+            scorer.includes(player.name.substring(0, player.name.indexOf(",")))
+          ) {
+            player.goals = Number(player.goals) + 1;
+          } else if (
+            primaryAssist &&
+            primaryAssist.includes(
+              player.name.substring(0, player.name.indexOf(","))
+            )
+          ) {
+            player.assists = Number(player.assists) + 1;
+          } else if (
+            secondaryAssist &&
+            secondaryAssist.includes(
+              player.name.substring(0, player.name.indexOf(","))
+            )
+          ) {
+            player.assists = Number(player.assists) + 1;
+          }
         }
       })
     })
