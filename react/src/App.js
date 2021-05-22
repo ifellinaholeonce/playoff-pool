@@ -74,17 +74,17 @@ class App extends Component {
         </header>
         <Grid>
           <Row>
-            <Col xs={11} md={8}>
-              <p className="App-intro">
-                Teams
-              </p>
-              < Teams teams={this.state.teams} players={this.state.players}/>
-            </Col>
-            <Col xs={7} md={4}>
+            <Col xs={12} md={4} mdPush={7}>
               <p className="App-intro">
                 Games Tonight
               </p>
               < Game games={this.state.games} />
+            </Col>
+            <Col xs={12} md={7} mdPull={4}>
+              <p className="App-intro">
+                Teams
+              </p>
+              < Teams teams={this.state.teams} players={this.state.players}/>
             </Col>
           </Row>
         </Grid>
